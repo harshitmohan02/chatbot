@@ -1,0 +1,218 @@
+/* App.css */
+
+/* --- MODIFIED: This container now centers its content --- */
+.page-container {
+  height: 100vh;
+  width: 100vw;
+  background-color: #f0f2f5; /* A light grey background for the page */
+  font-family: Arial, sans-serif;
+  
+  /* These new properties will center the chat window vertically and horizontally */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- MODIFIED: This is now the centered chat window, no longer fixed --- */
+.app-container {
+  /* REMOVED: position, bottom, right properties. It's no longer a floating widget. */
+  
+  /* UPDATED: Made the chat window larger for a desktop-centric view. */
+  width: 900px; 
+  height: 85vh; /* Takes up 85% of the viewport height */
+  max-width: 95%; /* Ensures it doesn't touch the screen edges on smaller views */
+
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1); /* Slightly softer shadow */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Crucial to contain the rounded corners */
+}
+
+.app-header {
+  background-color: #231f20; /* PwC Black */
+  padding: 10px 20px;
+  flex-shrink: 0; /* Prevents the header from shrinking */
+}
+
+.pwc-logo {
+  height: 40px;
+}
+
+/* --- NO CHANGES NEEDED for this section --- */
+.chat-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Messages Area */
+.messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.message {
+  padding: 12px 18px;
+  border-radius: 20px;
+  /* Adjusted max-width slightly for the wider container */
+  max-width: 80%; 
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.user-message {
+  background-color: #e87722; /* PwC Orange */
+  color: white;
+  border-top-right-radius: 5px;
+  align-self: flex-end;
+}
+
+.bot-message {
+  background-color: #f1f1f1;
+  color: #333;
+  border-top-left-radius: 5px;
+  align-self: flex-start;
+}
+
+.bot-message.error {
+  background-color: #ffebee;
+  color: #c62828;
+  font-weight: bold;
+}
+
+/* --- NO CHANGES NEEDED for this section --- */
+.chart-container {
+    position: relative;
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Input Area - NO CHANGES NEEDED */
+.input-container {
+  display: flex;
+  padding: 15px;
+  border-top: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
+  flex-shrink: 0;
+}
+
+.chat-input {
+  flex-grow: 1;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  margin-right: 10px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.chat-input:focus {
+  border-color: #e87722;
+  box-shadow: 0 0 5px rgba(232, 119, 34, 0.5);
+}
+
+.send-button {
+  background-color: #e87722;
+  color: white;
+  border: none;
+  padding: 0 25px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.send-button:hover:not(:disabled) {
+  background-color: #d46a1e;
+}
+
+.send-button:disabled {
+  background-color: #f3a970;
+  cursor: not-allowed;
+}
+
+/* --- Typing Indicator - NO CHANGES NEEDED --- */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.typing-indicator span {
+  height: 10px;
+  width: 10px;
+  background-color: #e87722; /* PwC Orange */
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 4px;
+  animation: bounce 1.4s infinite both;
+}
+
+.typing-indicator span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1.0);
+  }
+}
+
+/* --- NEW: Suggestion Prompts Styles --- */
+
+/* Container for the prompts, placed above the input area */
+.suggestion-prompts-container {
+  display: flex;
+  flex-wrap: wrap; /* Allows prompts to wrap to the next line on smaller screens */
+  justify-content: center; /* Centers the prompts horizontally */
+  gap: 10px; /* Space between prompts */
+  padding: 0 20px 15px 20px; /* Padding to keep it neat */
+  border-top: 1px solid #e0e0e0; /* Separator line from messages */
+  background-color: #ffffff;
+}
+
+/* Individual prompt button styling */
+.suggestion-prompt {
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  border-radius: 18px;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-align: left;
+}
+
+/* Hover effect to make them feel interactive */
+.suggestion-prompt:hover {
+  background-color: #f0f0f0;
+  border-color: #e87722; /* PwC Orange for the border */
+  color: #000;
+  transform: translateY(-1px); /* Slight lift effect */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
