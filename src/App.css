@@ -31,7 +31,7 @@
 }
 
 .app-header {
-  background-color: #231f20; /* PwC Black */
+  background-color: #ffffff; /* PwC Black */
   padding: 10px 20px;
   flex-shrink: 0; /* Prevents the header from shrinking */
 }
