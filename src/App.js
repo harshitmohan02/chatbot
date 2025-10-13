@@ -125,19 +125,22 @@ function ChatMessage({ msg }) {
 }
 
 
-// --- NEW ---: Component to render the suggestion prompts
+// --- MODIFIED ---: This component now includes a title and a wrapper for the buttons.
 function SuggestionPrompts({ prompts, onPromptClick }) {
     return (
       <div className="suggestion-prompts-container">
-        {prompts.map((prompt, index) => (
-          <button 
-            key={index} 
-            className="suggestion-prompt"
-            onClick={() => onPromptClick(prompt)}
-          >
-            {prompt}
-          </button>
-        ))}
+        <p className="suggestion-title">Here are the top 5 questions.</p>
+        <div className="prompts-wrapper">
+          {prompts.map((prompt, index) => (
+            <button 
+              key={index} 
+              className="suggestion-prompt"
+              onClick={() => onPromptClick(prompt)}
+            >
+              {prompt}
+            </button>
+          ))}
+        </div>
       </div>
     );
 }
@@ -150,7 +153,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // --- NEW ---: Define your suggestion prompts here
+  // Your new suggestion prompts are here
   const suggestionPrompts = [
     "Can you provide a list of entities where the Effective Tax Rate (%) compared to the Statutory Tax Rate shows more than a 10% ETR variance threshold with difference?​",
     "Was there any unabsorbed losses derived from 2022? If yes, what is the total value? ",
@@ -165,7 +168,6 @@ function App() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // --- MODIFIED ---: The core logic is now in a reusable function that accepts the message text.
   const sendQuery = async (queryText) => {
     if (!queryText.trim()) return;
 
@@ -177,7 +179,7 @@ function App() {
     }));
 
     setMessages((prev) => [...prev, userMessage]);
-    setInput(''); // Clear input regardless of source
+    setInput('');
     setLoading(true);
 
     try {
@@ -220,12 +222,10 @@ function App() {
     }
   };
 
-  // --- NEW ---: Handler for clicking a suggestion prompt
   const handleSuggestionClick = (prompt) => {
     sendQuery(prompt);
   };
 
-  // --- MODIFIED ---: This now calls the new `sendQuery` function
   const sendMessage = () => {
     sendQuery(input);
   };
@@ -237,7 +237,6 @@ function App() {
     }
   };
 
-  // --- NEW ---: Condition to show prompts only at the beginning of a chat
   const showSuggestions = messages.length === 1;
 
   return (
@@ -263,7 +262,6 @@ function App() {
             <div ref={messagesEndRef} />
           </div>
           
-          {/* --- NEW ---: Conditionally render the suggestion prompts */}
           {showSuggestions && !loading && (
             <SuggestionPrompts 
               prompts={suggestionPrompts} 
