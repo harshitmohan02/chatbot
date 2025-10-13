@@ -21,14 +21,8 @@ html, body {
 
 /* --- MODIFIED: This is now the centered chat window, no longer fixed --- */
 .app-container {
-  /* REMOVED: position, bottom, right properties. It's no longer a floating widget. */
   width: 100%; 
   height: 100%;
-  /* UPDATED: Made the chat window larger for a desktop-centric view. */
- /* width: 900px; 
-  /*height: 85vh; /* Takes up 85% of the viewport height */
-  /*max-width: 95%; /* Ensures it doesn't touch the screen edges on smaller views */
-
   background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1); /* Slightly softer shadow */
@@ -48,7 +42,6 @@ html, body {
   height: 40px;
 }
 
-/* --- NO CHANGES NEEDED for this section --- */
 .chat-container {
   flex-grow: 1;
   display: flex;
@@ -70,7 +63,6 @@ html, body {
 .message {
   padding: 10px 15px;
   border-radius: 18px;
-  /* Adjusted max-width slightly for the wider container */
   max-width: 85%; 
   line-height: 1.4;
   word-wrap: break-word;
@@ -96,7 +88,6 @@ html, body {
   font-weight: bold;
 }
 
-/* --- NO CHANGES NEEDED for this section --- */
 .chart-container {
     position: relative;
     padding: 10px;
@@ -105,7 +96,7 @@ html, body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* Input Area - NO CHANGES NEEDED */
+/* Input Area */
 .input-container {
   display: flex;
   padding: 15px;
@@ -151,7 +142,7 @@ html, body {
   cursor: not-allowed;
 }
 
-/* --- Typing Indicator - NO CHANGES NEEDED --- */
+/* Typing Indicator */
 .typing-indicator {
   display: flex;
   align-items: center;
@@ -190,15 +181,15 @@ html, body {
   }
 }
 
-
-/* --- MODIFIED: Suggestion Prompts Styles --- */
+/* --- MODIFIED: Suggestion Prompts Styles (Left-aligned & Numbered) --- */
 
 /* Main container for the whole suggestions block */
 .suggestion-prompts-container {
   display: flex;
-  flex-direction: column; /* Stacks the title on top of the buttons */
-  align-items: center;    /* Centers the title and button wrapper */
-  gap: 12px;              /* Space between title and buttons */
+  flex-direction: column; 
+  /* CHANGED: Aligns the title and button wrapper to the left */
+  align-items: flex-start;    
+  gap: 12px;              
   padding: 15px 20px;
   border-top: 1px solid #e0e0e0;
   background-color: #ffffff;
@@ -212,13 +203,17 @@ html, body {
   margin: 0;
 }
 
-/* New wrapper just for the buttons */
+/* Wrapper just for the buttons */
 .prompts-wrapper {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  /* CHANGED: Aligns buttons to the start (left) of the container */
+  justify-content: flex-start;
   gap: 8px;
   width: 100%;
+  
+  /* ADDED: Initializes a counter for numbering the prompts */
+  counter-reset: prompt-counter;
 }
 
 /* Individual prompt button styling */
@@ -232,13 +227,26 @@ html, body {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   text-align: left;
+  
+  /* ADDED: Increments the counter for each prompt button */
+  counter-increment: prompt-counter;
+}
+
+/* ADDED: This new pseudo-element generates and styles the number */
+.suggestion-prompt::before {
+  /* This generates the content: "1. ", "2. ", etc. */
+  content: counter(prompt-counter) ". ";
+  font-weight: bold;
+  /* Using the PwC orange for the number makes it stand out */
+  color: #e87722; 
+  margin-right: 6px; /* Adds a little space after the number */
 }
 
 /* Hover effect to make them feel interactive */
 .suggestion-prompt:hover {
   background-color: #f0f0f0;
-  border-color: #e87722; /* PwC Orange for the border */
+  border-color: #e87722;
   color: #000;
-  transform: translateY(-1px); /* Slight lift effect */
+  transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
