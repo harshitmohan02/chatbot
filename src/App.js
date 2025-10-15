@@ -83,9 +83,40 @@ const chartComponentsMap = {
     bubble: Bubble,
     scatter: Scatter,
 };
+
+// --- NEW ---: A component to render data in a clean, scrollable table
+function Table({ data }) {
+  if (!data || data.length === 0) return null;
+
+  const headers = Object.keys(data[0]);
+
+  return (
+    <div className="table-container">
+      <table className="results-table">
+        <thead>
+          <tr>
+            {headers.map((header) => (
+              <th key={header}>{header.replace(/_/g, ' ')}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, index) => (
+            <tr key={index}>
+              {headers.map((header) => (
+                <td key={header}>{String(row[header])}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
   
-// Your ChatMessage component remains unchanged.
+// --- MODIFIED ---: Updated to handle chart, table, and plain text messages
 function ChatMessage({ msg }) {
+  // User message
   if (msg.from === 'user') {
     return (
       <div className="message user-message" style={{ alignSelf: 'flex-end' }}>
@@ -93,17 +124,15 @@ function ChatMessage({ msg }) {
       </div>
     );
   }
+
+  // Bot message with a chart
   if (msg.isChart && msg.chartConfig) {
     const { type, data, options } = msg.chartConfig;
     const chartTypeKey = type ? type.toLowerCase() : 'bar';
     const ChartComponent = chartComponentsMap[chartTypeKey];
 
     if (!ChartComponent) {
-      return (
-        <div className="message bot-message error" style={{ alignSelf: 'flex-start' }}>
-          Unsupported chart type received: {type}
-        </div>
-      );
+      return <div className="message bot-message error" style={{ alignSelf: 'flex-start' }}>Unsupported chart type: {type}</div>;
     }
     
     const finalOptions = { ...defaultOptions, ...options };
@@ -117,6 +146,18 @@ function ChatMessage({ msg }) {
       </div>
     );
   }
+
+  // --- NEW ---: Bot message with a table
+  if (msg.isTable && msg.tableData) {
+    return (
+      <div className="message bot-message" style={{ alignSelf: 'flex-start', maxWidth: '800px', width: '100%', padding: '15px' }}>
+        <div style={{ marginBottom: '15px', whiteSpace: 'pre-wrap' }}>{msg.text}</div>
+        <Table data={msg.tableData} />
+      </div>
+    );
+  }
+
+  // Default bot message (plain text)
   return (
     <div className="message bot-message" style={{ whiteSpace: 'pre-wrap', alignSelf: 'flex-start' }}>
       {msg.text}
@@ -124,8 +165,7 @@ function ChatMessage({ msg }) {
   );
 }
 
-
-// --- MODIFIED ---: This component now includes a title and a wrapper for the buttons.
+// --- MODIFIED ---: Component to render the suggestion prompts with a title
 function SuggestionPrompts({ prompts, onPromptClick }) {
     return (
       <div className="suggestion-prompts-container">
@@ -153,7 +193,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Your new suggestion prompts are here
+  // Using the latest suggestion prompts you provided
   const suggestionPrompts = [
     "Can you provide a list of entities where the Effective Tax Rate (%) compared to the Statutory Tax Rate shows more than a 10% ETR variance threshold with difference?​",
     "Was there any unabsorbed losses derived from 2022? If yes, what is the total value? ",
@@ -203,11 +243,14 @@ function App() {
         return;
       }
       
+      // --- MODIFIED ---: Capturing all possible response types from the backend
       const botMessage = {
         from: 'bot',
         text: data.response,
         isChart: data.isChart || false,
         chartConfig: data.chartConfig || null,
+        isTable: data.isTable || false,
+        tableData: data.tableData || null,
       };
       setMessages((prev) => [...prev, botMessage]);
 
@@ -239,6 +282,7 @@ function App() {
 
   const showSuggestions = messages.length === 1;
 
+  // The final JSX render structure
   return (
     <div className="page-container">
       <div className="app-container">
