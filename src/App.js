@@ -195,11 +195,11 @@ function App() {
 
   // Using the latest suggestion prompts you provided
   const suggestionPrompts = [
-    "Can you provide a list of entities where the Effective Tax Rate (%) compared to the Statutory Tax Rate shows more than a 10% ETR variance threshold with difference?​",
-    "Was there any unabsorbed losses derived from 2022? If yes, what is the total value? ",
-    "Create a bar graph for top 5 ETR vs client with ETR descending",
-    "What are the top three NQE items with respective value?",
-    "What's the tax position for Honda for the latest YA?"
+    "Can you provide a list of entities where the Effective Tax Rate (%) compared to the Statutory Tax Rate shows more than a 10% ETR positive variance threshold with difference?",
+    "Can you compare the total disallowed and allowable donations claimed? What is the proportionate percentage of the deduction?",
+    "Create a pie graph for top 5 ETR vs client with ETR descending",
+    "Create a line graph for QE vs CA?",
+    "What's the tax position for Tropicana for the latest YA?"
   ];
 
   const backendUrl = 'https://chatbotexcelpbi-azhjh5bpbzckaeff.southeastasia-01.azurewebsites.net/chat';
