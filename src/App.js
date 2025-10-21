@@ -84,7 +84,7 @@ const chartComponentsMap = {
     scatter: Scatter,
 };
 
-// --- NEW ---: A component to render data in a clean, scrollable table
+// --- MODIFIED ---: Table component remains the same, but will be styled by new CSS
 function Table({ data }) {
   if (!data || data.length === 0) return null;
 
@@ -114,7 +114,6 @@ function Table({ data }) {
   );
 }
   
-// --- MODIFIED ---: Updated to handle chart, table, and plain text messages
 function ChatMessage({ msg }) {
   // User message
   if (msg.from === 'user') {
@@ -147,7 +146,7 @@ function ChatMessage({ msg }) {
     );
   }
 
-  // --- NEW ---: Bot message with a table
+  // Bot message with a table
   if (msg.isTable && msg.tableData) {
     return (
       <div className="message bot-message" style={{ alignSelf: 'flex-start', maxWidth: '800px', width: '100%', padding: '15px' }}>
@@ -165,7 +164,6 @@ function ChatMessage({ msg }) {
   );
 }
 
-// --- MODIFIED ---: Component to render the suggestion prompts with a title
 function SuggestionPrompts({ prompts, onPromptClick }) {
     return (
       <div className="suggestion-prompts-container">
@@ -193,7 +191,6 @@ function App() {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Using the latest suggestion prompts you provided
   const suggestionPrompts = [
     "Can you provide a list of entities where the Effective Tax Rate (%) compared to the Statutory Tax Rate shows more than a 10% ETR positive variance threshold with difference?",
     "Was there any unabsorbed losses derived from 2020? If yes, what is the total value? ",
@@ -207,6 +204,12 @@ function App() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // --- NEW ---: Function to handle the "New Chat" button click
+  const handleNewChat = () => {
+    // The simplest and most effective way to start a fresh session is to reload the page.
+    window.location.reload();
+  };
 
   const sendQuery = async (queryText) => {
     if (!queryText.trim()) return;
@@ -243,7 +246,6 @@ function App() {
         return;
       }
       
-      // --- MODIFIED ---: Capturing all possible response types from the backend
       const botMessage = {
         from: 'bot',
         text: data.response,
@@ -282,12 +284,15 @@ function App() {
 
   const showSuggestions = messages.length === 1;
 
-  // The final JSX render structure
   return (
     <div className="page-container">
       <div className="app-container">
+        {/* --- MODIFIED: Header now contains the logo and the new chat button --- */}
         <header className="app-header" aria-label="PwC logo header">
           <img src={pwcLogo} alt="PwC Logo" className="pwc-logo" />
+          <button onClick={handleNewChat} className="new-chat-button">
+            <span className="refresh-icon">⟳</span> New Chat
+          </button>
         </header>
         <main className="chat-container" role="main">
           <div className="messages" aria-live="polite" aria-atomic="true">
